@@ -33,6 +33,8 @@ function WorkSheetApp() {
   const fetchChapters = useServerFn(getChapters);
   const fetchWorksheet = useServerFn(generateWorksheet);
 
+  const [downloadToken, setDownloadToken] = useState("");
+
   const [classes, setClasses] = useState<number[]>([]);
   const [subjects, setSubjects] = useState<string[]>([]);
   const [chapters, setChapters] = useState<string[]>([]);
@@ -110,6 +112,12 @@ function WorkSheetApp() {
     if (total <= 0) return "Add at least one question to the worksheet.";
     return null;
   };
+  const validateAccessToken = (): string | null => {
+  if (downloadToken.trim() !== "vansil") {
+    return "Invalid access token.";
+  }
+  return null;
+};
 
   const generateWorksheetData = async () => {
     const v = validate();
@@ -139,66 +147,89 @@ function WorkSheetApp() {
     await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
   };
 
-  const handlePreview = async () => {
-    setError(null);
-    const v = validate();
-    if (v) {
-      setError(v);
-      return;
-    }
-    setLoading(true);
-    try {
-      const data = await generateWorksheetData();
-      setResult(data);
-      setToast("Worksheet generated.");
-      setTimeout(() => setToast(null), 2200);
-      requestAnimationFrame(() => {
-        document.getElementById("preview")?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong.");
-      setResult(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+const handlePreview = async () => {
+  setError(null);
 
-  const handleDownload = async () => {
-    setError(null);
-    setLoading(true);
-    try {
-      let data = result;
-      if (!data) {
-        data = await generateWorksheetData();
-        flushSync(() => setResult(data));
-      }
+  const tokenError = validateAccessToken();
+  if (tokenError) {
+    setError(tokenError);
+    return;
+  }
 
-      await waitForPrintLayout();
-      window.print();
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const v = validate();
+  if (v) {
+    setError(v);
+    return;
+  }
 
-  const handleReset = () => {
-    setForm({
-      schoolName: "Alpha Academy",
-      title: "Unit Test Worksheet",
-      teacher: "",
-      className: "",
-      subject: "",
-      chapter: "",
-      date: todayISO(),
-      mcq: 5,
-      fill_blank: 3,
-      true_false: 3,
-      subjective: 2,
+  setLoading(true);
+
+  try {
+    const data = await generateWorksheetData();
+    setResult(data);
+
+    setToast("Worksheet generated.");
+    setTimeout(() => setToast(null), 2200);
+
+    requestAnimationFrame(() => {
+      document
+        .getElementById("preview")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
+  } catch (e) {
+    setError(e instanceof Error ? e.message : "Something went wrong.");
     setResult(null);
-    setError(null);
-  };
+  } finally {
+    setLoading(false);
+  }
+};
+ const handleDownload = async () => {
+  setError(null);
+
+  const tokenError = validateAccessToken();
+  if (tokenError) {
+    setError(tokenError);
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    let data = result;
+
+    if (!data) {
+      data = await generateWorksheetData();
+      flushSync(() => setResult(data));
+    }
+
+    await waitForPrintLayout();
+    window.print();
+  } catch (e) {
+    setError(e instanceof Error ? e.message : "Something went wrong.");
+  } finally {
+    setLoading(false);
+  }
+};
+
+ const handleReset = () => {
+  setForm({
+    schoolName: "Alpha Academy",
+    title: "Unit Test Worksheet",
+    teacher: "",
+    className: "",
+    subject: "",
+    chapter: "",
+    date: todayISO(),
+    mcq: 5,
+    fill_blank: 3,
+    true_false: 3,
+    subjective: 2,
+  });
+
+  setDownloadToken("");
+  setResult(null);
+  setError(null);
+};
 
   return (
     <div className="min-h-screen">
@@ -347,7 +378,14 @@ function WorkSheetApp() {
                   {error}
                 </div>
               )}
-
+<Field label="Access token">
+  <Input
+    type="password"
+    value={downloadToken}
+    onChange={(v) => setDownloadToken(v)}
+    placeholder="Enter access token"
+  />
+</Field>
               <div className="flex flex-wrap gap-2 pt-2">
                 <button
                   onClick={handlePreview}
