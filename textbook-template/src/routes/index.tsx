@@ -38,7 +38,7 @@ function WorkSheetApp() {
   const [chapters, setChapters] = useState<string[]>([]);
 
   const [form, setForm] = useState({
-    schoolName: "",
+    schoolName: "Alpha Academy",
     title: "Unit Test Worksheet",
     teacher: "",
     className: "" as number | "",
@@ -184,7 +184,7 @@ function WorkSheetApp() {
 
   const handleReset = () => {
     setForm({
-      schoolName: "",
+      schoolName: "Alpha Academy",
       title: "Unit Test Worksheet",
       teacher: "",
       className: "",
@@ -253,7 +253,7 @@ function WorkSheetApp() {
                 <Input
                   value={form.teacher}
                   onChange={(v) => setForm({ ...form, teacher: v })}
-                  placeholder="Ms. Sharma"
+                  placeholder="Ruchi Puri / Yukta Puri"
                 />
               </Field>
 
