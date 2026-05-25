@@ -1,0 +1,546 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-hairline: var(--hairline);
+  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+:root {
+  --radius: 0.5rem;
+
+  /* Dark academic / premium SaaS palette */
+  --background: oklch(0.16 0.005 250);
+  --foreground: oklch(0.96 0.005 90);
+
+  --card: oklch(0.19 0.006 250);
+  --card-foreground: oklch(0.96 0.005 90);
+
+  --popover: oklch(0.19 0.006 250);
+  --popover-foreground: oklch(0.96 0.005 90);
+
+  --primary: oklch(0.95 0.01 90);
+  --primary-foreground: oklch(0.16 0.005 250);
+
+  --secondary: oklch(0.23 0.006 250);
+  --secondary-foreground: oklch(0.92 0.005 90);
+
+  --muted: oklch(0.22 0.006 250);
+  --muted-foreground: oklch(0.65 0.01 250);
+
+  --accent: oklch(0.78 0.13 75);
+  --accent-foreground: oklch(0.16 0.005 250);
+
+  --destructive: oklch(0.6 0.2 25);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  --border: oklch(0.27 0.006 250);
+  --hairline: oklch(0.3 0.006 250);
+  --input: oklch(0.22 0.006 250);
+  --ring: oklch(0.5 0.05 90);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html, body { background-color: var(--color-background); color: var(--color-foreground); }
+  body {
+    font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent); color: var(--accent-foreground); }
+}
+
+/* Worksheet sheet styling (used in preview + print) */
+.sheet {
+  --sheet-ink: #182235;
+  --sheet-muted: #647084;
+  --sheet-line: #d5dde8;
+  --sheet-soft: #f5f8fc;
+  --sheet-blue: #2456a6;
+  --sheet-purple: #5b4b9a;
+  --sheet-teal: #27766f;
+  --sheet-indigo: #394f9c;
+  background: #ffffff;
+  color: var(--sheet-ink);
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  padding: 32px 34px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.16);
+}
+
+.sheet h1,
+.sheet h2,
+.sheet h3 {
+  font-family: "Instrument Serif", ui-serif, Georgia, serif;
+}
+
+.sheet-header {
+  align-items: stretch;
+  background: #ffffff;
+  border: 1px solid #b9c7da;
+  border-top: 5px solid var(--sheet-blue);
+  border-radius: 6px;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  padding: 18px 20px 16px;
+}
+
+.sheet-kicker {
+  color: var(--sheet-blue);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  margin: 0 0 8px;
+  text-transform: uppercase;
+}
+
+.sheet-header h1 {
+  color: #101828;
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.16;
+  margin: 0;
+}
+
+.sheet-header h2 {
+  color: #344054;
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 7px 0 0;
+}
+
+.sheet-badge {
+  align-items: center;
+  background: var(--sheet-soft);
+  border: 1px solid #c7d2e2;
+  border-radius: 4px;
+  display: grid;
+  flex: 0 0 auto;
+  height: 76px;
+  justify-items: center;
+  min-width: 82px;
+  padding: 10px;
+}
+
+.sheet-badge span {
+  color: var(--sheet-muted);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.sheet-badge strong {
+  color: var(--sheet-blue);
+  font-size: 26px;
+  line-height: 1;
+}
+
+.info-grid {
+  display: grid;
+  gap: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 14px;
+  border: 1px solid var(--sheet-line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.info-box {
+  background: #ffffff;
+  border-right: 1px solid var(--sheet-line);
+  min-height: 48px;
+  padding: 9px 12px;
+}
+
+.info-box-wide {
+  background: var(--sheet-soft);
+  border-right: 0;
+  border-top: 1px solid var(--sheet-line);
+  grid-column: 1 / -1;
+}
+
+.info-box:nth-child(3) {
+  border-right: 0;
+}
+
+.info-box span,
+.form-line span {
+  color: var(--sheet-muted);
+  display: block;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.info-box strong {
+  color: var(--sheet-ink);
+  display: block;
+  font-size: 12.5px;
+  line-height: 1.25;
+  margin-top: 5px;
+}
+
+.student-fields {
+  align-items: end;
+  background: #ffffff;
+  border: 1px solid var(--sheet-line);
+  border-radius: 4px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 145px 125px;
+  margin-top: 10px;
+  padding: 11px 14px 10px;
+}
+
+.form-line i {
+  border-bottom: 1px solid #75849a;
+  display: block;
+  height: 17px;
+  margin-top: 2px;
+}
+
+.worksheet-body {
+  margin-top: 20px;
+}
+
+.worksheet-section {
+  margin-top: 19px;
+}
+
+.section-banner {
+  align-items: center;
+  border-bottom: 2px solid var(--section-color);
+  border-radius: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0 7px;
+}
+
+.worksheet-section-blue {
+  --section-color: var(--sheet-blue);
+  --section-bg: #f3f6fb;
+}
+
+.worksheet-section-purple {
+  --section-color: var(--sheet-purple);
+  --section-bg: #f5f4fa;
+}
+
+.worksheet-section-teal {
+  --section-color: var(--sheet-teal);
+  --section-bg: #f2f8f7;
+}
+
+.worksheet-section-indigo {
+  --section-color: var(--sheet-indigo);
+  --section-bg: #f3f5fb;
+}
+
+.section-banner span {
+  color: var(--section-color);
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  margin-right: 10px;
+  text-transform: uppercase;
+}
+
+.section-banner h3 {
+  color: #182235;
+  display: inline;
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.section-banner strong {
+  background: transparent;
+  border: 0;
+  color: var(--section-color);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.section-instruction {
+  color: #5b6678;
+  font-size: 12px;
+  font-style: italic;
+  margin: 7px 0 0;
+}
+
+.section-content {
+  font-size: 12.8px;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+.question-list {
+  counter-reset: worksheet-question;
+  display: grid;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.question-item {
+  background: transparent;
+  border-bottom: 1px solid #e8edf4;
+  border-radius: 0;
+  counter-increment: worksheet-question;
+  padding: 10px 0 10px 30px;
+  position: relative;
+}
+
+.question-item:first-child {
+  border-top: 1px solid #e8edf4;
+}
+
+.question-item::before {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  color: var(--section-color);
+  content: counter(worksheet-question) ".";
+  display: flex;
+  font-size: 12px;
+  font-weight: 800;
+  height: auto;
+  justify-content: flex-start;
+  left: 0;
+  position: absolute;
+  top: 10px;
+  width: 24px;
+}
+
+.question-text {
+  color: #172033;
+  font-weight: 650;
+  margin: 0;
+}
+
+.option-grid {
+  display: grid;
+  column-gap: 18px;
+  row-gap: 5px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 8px;
+}
+
+.option-pill {
+  align-items: start;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  display: flex;
+  gap: 7px;
+  min-height: auto;
+  padding: 0;
+}
+
+.option-letter {
+  align-items: center;
+  background: var(--section-bg);
+  border: 1px solid #d4dce8;
+  border-radius: 50%;
+  color: var(--section-color);
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 10px;
+  font-weight: 800;
+  height: 18px;
+  justify-content: center;
+  width: 18px;
+}
+
+/* Simple option row (plain A. text) */
+.option-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 2px 0;
+}
+.option-label {
+  color: inherit;
+  font-weight: 600;
+  min-width: 20px;
+  line-height: 1;
+}
+.option-text {
+  color: inherit;
+  flex: 1 1 auto;
+}
+
+.tf-row {
+  align-items: start;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr 96px;
+}
+
+.tf-answer {
+  border-bottom: 1px solid #8793a5;
+  color: #64748b;
+  font-size: 11px;
+  padding-bottom: 4px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.answer-lines {
+  display: grid;
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.answer-lines span {
+  border-bottom: 1px solid #aeb9c8;
+  display: block;
+  height: 12px;
+}
+
+.sheet-footer {
+  align-items: center;
+  border-top: 1px solid var(--sheet-line);
+  color: #64748b;
+  display: flex;
+  font-size: 11px;
+  justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 10px;
+}
+
+.print-page-footer {
+  display: none;
+}
+
+/* ---------- Print: only the worksheet shows on paper ---------- */
+@media print {
+  @page {
+    margin: 14mm 13mm 18mm;
+    size: A4;
+  }
+
+  html,
+  body,
+  #root {
+    background: #ffffff ;
+    height: auto;
+    overflow: visible ;
+  }
+
+  body {
+    color: #000000 ;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .no-print {
+    display: none ;
+  }
+
+  .print-area {
+    display: block ;
+    height: auto ;
+    overflow: visible ;
+  }
+
+  .sheet {
+    background: #ffffff;
+    box-shadow: none ;
+    margin: 0 ;
+    max-width: none ;
+    overflow: visible ;
+    padding: 0 ;
+    width: 100% ;
+  }
+
+  .sheet-header,
+  .info-box,
+  .student-fields,
+  .section-banner,
+  .question-item,
+  .option-pill {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .worksheet-section {
+    break-inside: auto;
+    page-break-inside: auto;
+  }
+
+  .section-banner {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .question-list {
+    gap: 8px;
+  }
+
+  .question-item {
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+
+  .sheet-footer {
+    bottom: 0;
+  }
+
+  .print-page-footer {
+    align-items: center;
+    bottom: 7mm;
+    color: #64748b;
+    display: flex;
+    font-size: 10px;
+    justify-content: space-between;
+    left: 13mm;
+    position: fixed;
+    right: 13mm;
+  }
+
+  .page-number::after {
+    content: "Page " counter(page);
+  }
+}
